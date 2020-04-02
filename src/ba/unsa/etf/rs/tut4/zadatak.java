@@ -1,4 +1,4 @@
-package sample;
+package ba.unsa.etf.rs.tut4;
 
 
 import ba.unsa.etf.rs.tut4.Artikal;

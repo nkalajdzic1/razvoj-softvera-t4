@@ -9,6 +9,111 @@ import static org.junit.jupiter.api.Assertions.*;
 class ArtikalTest {
 
     @Test
+    void slanjeStringa() {
+        Artikal a = new Artikal("Sifra,Proizvod,100");
+        assertEquals("Sifra", a.getSifra());
+        assertEquals("Proizvod", a.getNaziv());
+        assertEquals(100, a.getCijena());
+    }
+
+    @Test
+    void prazanStringZaArtikal() {
+        assertThrows( IllegalArgumentException.class, () -> new Artikal(""), "String je prazan!");
+    }
+
+    @Test
+    void daLiSuJednaki() {
+        // testiranje realnih brojeva
+        Artikal a1 = new Artikal("ABC", "Proizvod", 100.0001);
+        Artikal a2 = new Artikal("ABC", "Proizvod", 100.00010000001);
+        assertNotEquals(a1, a2);
+        assertNotEquals(a2, a1);
+        a1.setCijena( 0.00000000001);          // nerealne cijene ali takodjer nejednaki brojevi!!!
+        a2.setCijena( 0.00000000001000000001);
+        assertNotEquals(a1, a2);
+        assertNotEquals(a2, a1);
+    }
+
+    @Test
+    void prazno() {
+        // prazan konstruktor
+           Artikal a = new Artikal();
+            assertNull(a.getSifra());
+            assertNull(a.getNaziv());
+            assertEquals(0,a.getCijena()); // jer sam postavio da je ovo default vrijednost
+    }
+
+    @Test
+    void vracanjeStringa() {
+        Artikal a = new Artikal("Sifra","Proizvod",1.5);
+        assertEquals(a.toString(),"Sifra,Proizvod,1.5");
+    }
+
+    @Test
+    void izbaciDuplikate2() {
+         ArrayList<Artikal> lista = new ArrayList<>();
+         lista.add(new Artikal("ABC", "Proizvod", 100));
+         Artikal.izbaciDuplikate(lista);
+         assertEquals(1,lista.size());
+
+    }
+
+    @Test
+    void izbaciDuplikate3() {
+        ArrayList<Artikal> lista = new ArrayList<>();
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("AB", "Proizvod", 100));
+        Artikal.izbaciDuplikate(lista);
+        assertEquals(2,lista.size());
+    }
+
+    @Test
+    void izbaciDuplikateSaPraznomListom() {
+        ArrayList<Artikal> lista = new ArrayList<>();
+        Artikal.izbaciDuplikate(lista);
+        assertEquals(0,lista.size());
+
+    }
+
+    @Test
+    void izbaciDuplikate4() {
+        ArrayList<Artikal> lista = new ArrayList<>();
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("DEF", "Proizvod", 100));
+        lista.add(new Artikal("GHI", "Proizvod", 100));
+        Artikal.izbaciDuplikate(lista);  // ništa ne treba izbaciti
+        assertEquals(3,lista.size());
+        assertEquals("ABC", lista.get(0).getSifra());
+        assertEquals("DEF", lista.get(1).getSifra());
+        assertEquals("GHI", lista.get(2).getSifra());
+    }
+
+    @Test
+    void izbaciDuplikate5() {
+        ArrayList<Artikal> lista = new ArrayList<>();
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("DEF", "Proizvod", 100));
+        lista.add(new Artikal("DEF", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        lista.add(new Artikal("GHI", "Proizvod", 100));
+        lista.add(new Artikal("DEF", "Proizvod", 100));
+        lista.add(new Artikal("GHI", "Proizvod", 100));
+        lista.add(new Artikal("ABC", "Proizvod", 100));
+        Artikal.izbaciDuplikate(lista);
+        assertEquals(3,lista.size());
+        assertEquals("ABC", lista.get(0).getSifra());  // provjera redoslijeda nakon izbacivanja
+        assertEquals("DEF", lista.get(1).getSifra());
+        assertEquals("GHI", lista.get(2).getSifra());
+    }
+    //--------------------------------------------------- moji testovi su iznad
+    @Test
     void getSifra() {
         Artikal a = new Artikal("ABC", "Proizvod", 100);
         assertEquals("ABC", a.getSifra());
