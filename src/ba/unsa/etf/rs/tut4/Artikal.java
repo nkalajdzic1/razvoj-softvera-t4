@@ -23,7 +23,9 @@ public class Artikal {
         setCijena(Double.parseDouble(niz[2]));
     }
 
+    public Artikal() {
 
+    }
 
     public String getSifra() {
         return sifra;
@@ -63,7 +65,7 @@ public class Artikal {
         return this.sifra.equals(a.sifra) && this.naziv.equals(a.naziv) && Math.abs(this.cijena-a.cijena) <= 1e-10*(Math.abs(this.cijena) + Math.abs(a.cijena));
     }
 
-    public static void izbaciDuplikate(ArrayList<Artikal> lista) {
+    public static ArrayList<Artikal> izbaciDuplikate(ArrayList<Artikal> lista) {
         for(int i=0; i<lista.size(); i++){
             for(int j=i+1; j<lista.size(); j++){
                 if(lista.get(i).equals(lista.get(j))){
@@ -72,5 +74,6 @@ public class Artikal {
                 }
             }
         }
+        return lista;
     }
 }
