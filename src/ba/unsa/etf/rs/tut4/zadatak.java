@@ -1,7 +1,6 @@
 package ba.unsa.etf.rs.tut4;
 
 
-import ba.unsa.etf.rs.tut4.Artikal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -11,7 +10,6 @@ import javafx.scene.control.TextArea;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static ba.unsa.etf.rs.tut4.Artikal.izbaciDuplikate;
 
