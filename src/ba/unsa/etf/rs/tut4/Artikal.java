@@ -21,6 +21,7 @@ public class Artikal {
         String[] niz=string.split(",");
         setSifra(niz[0]);
         setNaziv(niz[1]);
+        if(niz[2].matches("[^(0-9)]")) throw new IllegalArgumentException("Nepravilan unos cijene!");
         setCijena(Double.parseDouble(niz[2]));
     }
 

@@ -22,14 +22,22 @@ public class zadatak {
     public Tab tab1, tab2;
 
     ArrayList<Artikal> filter = new ArrayList<>();
+
+    private boolean provjeri(String s) {
+        char[] niz = s.toCharArray();
+        for( char znak: niz) if( !(znak>='0' && znak<='9') ) return false;
+        return  true;
+    }
+
     public void pokupi() {
         prikaziTekst.clear();
         ArrayList<Artikal> lista = new ArrayList<>();
         String sav_tekst=pokupiTekst.getText();
         String[] s=sav_tekst.split("\n");
+        //provjera
         for( String po_artiklu: s) {
             String[] artikli_uneseni=po_artiklu.split(",");
-            if(artikli_uneseni.length<3){
+            if(artikli_uneseni.length!=3 || artikli_uneseni[0].isEmpty() || artikli_uneseni[1].isEmpty() || !provjeri(artikli_uneseni[2])){
                 Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
                // pokupiTekst.clear();  <- opcionalno je, mozda je bolje ostaviti tekst pa da korisnik ispravi onda
                 a.show();
@@ -38,9 +46,9 @@ public class zadatak {
                 return;
             }
         }
+
         if(s.length==0) {
             Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
-           // pokupiTekst.clear();
             a.show();
             Button okButton = (Button) a.getDialogPane().lookupButton(ButtonType.OK);
             okButton.setId("myID"); // treba nam radi testova da se ukine alert
@@ -60,9 +68,18 @@ public class zadatak {
         prikaziTekst.appendText(filter.get(i) + "");
         sviArtikli.setItems(sifre);
     }
+
     String svi_artikli = "";
+
     public void dodajNaRacun() {
         konacniRacun.setText("");
+        if(filter.size() == 0) {
+            Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
+            a.show();
+            Button okButton = (Button) a.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("myID"); // treba nam radi testova de se ukine alert
+            return;
+        }
         Artikal trenutni =  new Artikal();
         for(Artikal a: filter) if(a.getSifra().equals(sviArtikli.getValue())) trenutni = a;
         DecimalFormat dvije_decimale = new DecimalFormat("#,###,###,##0.00");
