@@ -3,10 +3,7 @@ package ba.unsa.etf.rs.tut4;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -21,6 +18,8 @@ public class zadatak {
     public ChoiceBox<String> sviArtikli;
     public Spinner<Integer> kolicina;
     public TextArea konacniRacun;
+    public Button dugmeDodaj;
+    public Tab tab1, tab2;
 
     ArrayList<Artikal> filter = new ArrayList<>();
     public void pokupi() {
@@ -28,8 +27,23 @@ public class zadatak {
         ArrayList<Artikal> lista = new ArrayList<>();
         String sav_tekst=pokupiTekst.getText();
         String[] s=sav_tekst.split("\n");
+        for( String po_artiklu: s) {
+            String[] artikli_uneseni=po_artiklu.split(",");
+            if(artikli_uneseni.length<3){
+                Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
+               // pokupiTekst.clear();  <- opcionalno je, mozda je bolje ostaviti tekst pa da korisnik ispravi onda
+                a.show();
+                Button okButton = (Button) a.getDialogPane().lookupButton(ButtonType.OK);
+                okButton.setId("myID"); // treba nam radi testova de se ukine alert
+                return;
+            }
+        }
         if(s.length==0) {
-            prikaziTekst.appendText("Pogresan unos artikala!");
+            Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
+           // pokupiTekst.clear();
+            a.show();
+            Button okButton = (Button) a.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("myID"); // treba nam radi testova da se ukine alert
             return;
         }
         for (String value : s) {
@@ -37,13 +51,16 @@ public class zadatak {
         }
         filter = izbaciDuplikate(lista);
         ObservableList<String> sifre = FXCollections.observableArrayList();
-        for(Artikal x: filter){
-            prikaziTekst.appendText(x + "\n");
-            sifre.add(x.getSifra());
+        int i;
+        for(i=0; i<filter.size(); i++){
+           if( i!=filter.size()-1 ) prikaziTekst.appendText(filter.get(i) + "\n");
+            sifre.add(filter.get(i).getSifra());
+            if(i==filter.size()-1) break;
         }
+        prikaziTekst.appendText(filter.get(i) + "");
         sviArtikli.setItems(sifre);
     }
-    String svi_artikli = new String();
+    String svi_artikli = "";
     public void dodajNaRacun() {
         konacniRacun.setText("");
         Artikal trenutni =  new Artikal();
