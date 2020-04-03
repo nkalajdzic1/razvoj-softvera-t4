@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import static ba.unsa.etf.rs.tut4.Artikal.izbaciDuplikate;
 
@@ -24,9 +25,8 @@ public class zadatak {
     ArrayList<Artikal> filter = new ArrayList<>();
 
     private boolean provjeri(String s) {
-        char[] niz = s.toCharArray();
-        for( char znak: niz) if( !(znak>='0' && znak<='9') ) return false;
-        return  true;
+        Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+        return pattern.matcher(s).matches();
     }
 
     public void pokupi() {
@@ -34,10 +34,11 @@ public class zadatak {
         ArrayList<Artikal> lista = new ArrayList<>();
         String sav_tekst=pokupiTekst.getText();
         String[] s=sav_tekst.split("\n");
+
         //provjera
         for( String po_artiklu: s) {
             String[] artikli_uneseni=po_artiklu.split(",");
-            if(artikli_uneseni.length!=3 || artikli_uneseni[0].isEmpty() || artikli_uneseni[1].isEmpty() || !provjeri(artikli_uneseni[2])){
+            if( artikli_uneseni.length<3 || artikli_uneseni[0].isEmpty() || artikli_uneseni[1].isEmpty() || !provjeri(artikli_uneseni[2]) ){
                 Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
                // pokupiTekst.clear();  <- opcionalno je, mozda je bolje ostaviti tekst pa da korisnik ispravi onda
                 a.show();
@@ -47,17 +48,11 @@ public class zadatak {
             }
         }
 
-        if(s.length==0) {
-            Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
-            a.show();
-            Button okButton = (Button) a.getDialogPane().lookupButton(ButtonType.OK);
-            okButton.setId("myID"); // treba nam radi testova da se ukine alert
-            return;
-        }
         for (String value : s) {
             lista.add(new Artikal(value));
         }
         filter = izbaciDuplikate(lista);
+
         ObservableList<String> sifre = FXCollections.observableArrayList();
         int i;
         for(i=0; i<filter.size(); i++){
@@ -73,8 +68,8 @@ public class zadatak {
 
     public void dodajNaRacun() {
         konacniRacun.setText("");
-        if(filter.size() == 0) {
-            Alert a = new Alert(Alert.AlertType.ERROR,"Pogrešan unos!");
+        if(filter.size() == 0 || sviArtikli.getSelectionModel().isEmpty()) {
+            Alert a = new Alert(Alert.AlertType.ERROR,"Niste izabrali artikal!");
             a.show();
             Button okButton = (Button) a.getDialogPane().lookupButton(ButtonType.OK);
             okButton.setId("myID"); // treba nam radi testova de se ukine alert

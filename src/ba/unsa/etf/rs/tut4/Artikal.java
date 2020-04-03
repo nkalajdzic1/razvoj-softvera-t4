@@ -1,6 +1,7 @@
 package ba.unsa.etf.rs.tut4;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Artikal {
     public String sifra;
@@ -19,9 +20,9 @@ public class Artikal {
     public Artikal(String string) {
         if(string.isEmpty()) throw  new IllegalArgumentException("String je prazan!");
         String[] niz=string.split(",");
+        if(niz.length<3) throw new IllegalArgumentException("Pogresan unos!");
         setSifra(niz[0]);
         setNaziv(niz[1]);
-        if(niz[2].matches("[^(0-9)]")) throw new IllegalArgumentException("Nepravilan unos cijene!");
         setCijena(Double.parseDouble(niz[2]));
     }
 
